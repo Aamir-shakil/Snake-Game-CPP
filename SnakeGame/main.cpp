@@ -4,19 +4,17 @@
 #include "Game.h"
 
 int main() {
-    std::cout << "Headers included successfully!" << std::endl;
+    Snake snake(5, 5);
 
-    // Test creating a Segment
-    Segment s(5, 10);
-    std::cout << "Segment at (" << s.x << ", " << s.y << ")" << std::endl;
+    snake.grow();
+    snake.grow();
 
-    // Test creating a Snake pointer (constructor not implemented yet)
-    // Snake* snake = new Snake(0, 0);
-    // delete snake;
+    Segment head = snake.getHead();
+    std::cout << "Snake head at (" << head.x << ", " << head.y << ")\n";
 
-    // Test creating a Game pointer (constructor not implemented yet)
-    // Game* game = new Game(20, 20);
-    // delete game;
+    snake.move();
+    head = snake.getHead();
+    std::cout << "Snake moved to (" << head.x << ", " << head.y << ")\n";
 
     return 0;
 }
