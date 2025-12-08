@@ -19,10 +19,27 @@
     <Filter Include="include">
       <UniqueIdentifier>{81748034-8319-4446-aa4c-f47932ec5db2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="docs">
+      <UniqueIdentifier>{92cda331-dc7e-43e1-aaf3-a90a2709a125}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets">
+      <UniqueIdentifier>{bbdfdca4-f1a9-47c4-a618-f329b85fe3f3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>src</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Snake.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="Segment.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
