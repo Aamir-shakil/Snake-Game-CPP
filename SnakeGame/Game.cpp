@@ -73,33 +73,51 @@ void Game::update() {
 void Game::render() {
     system("cls"); // clear screen (Windows only)
 
+    // Top border
+    std::cout << '+';
+    for (int x = 0; x < width; x++) std::cout << '-';
+    std::cout << "+\n";
+
     for (int y = 0; y < height; y++) {
+        std::cout << '|'; // left border
         for (int x = 0; x < width; x++) {
             bool printed = false;
 
-            // Print snake
+            // Draw snake
             for (int i = 0; i < snake->getLength(); i++) {
-                Segment s = snake->getSegment(i);  // <-- FIXED
+                Segment s = snake->getSegment(i);
                 if (s.x == x && s.y == y) {
-                    std::cout << "O";
+                    std::cout << 'O';
                     printed = true;
                     break;
                 }
             }
 
-            // Print food
+            // Draw food
             if (!printed && x == foodX && y == foodY) {
-                std::cout << "*";
+                std::cout << '*';
                 printed = true;
             }
 
-            if (!printed) std::cout << ".";
+            // Empty space
+            if (!printed) std::cout << ' ';
         }
-        std::cout << "\n";
+        std::cout << "|\n"; // right border
     }
 
-    std::cout << "Score: " << snake->getLength() - 1 << "\n";
+    // Bottom border
+    std::cout << '+';
+    for (int x = 0; x < width; x++) std::cout << '-';
+    std::cout << "+\n";
+
+    std::cout << "Score: " << score << "\n";
+
+    // If game over
+    if (!running) {
+        std::cout << "\n    GAME OVER! Final Score: " << score << "\n";
+    }
 }
+
 
 
 // Game loop
