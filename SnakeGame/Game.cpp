@@ -7,14 +7,13 @@
 
 // Constructor
 Game::Game(int w, int h) : width(w), height(h), running(true), score(0) {
-    snake = new Snake(w / 2, h / 2);
+    snake = std::make_unique<Snake>(w / 2, h / 2);
     placeFood();
 }
 
 
 // Destructor
 Game::~Game() {
-    delete snake;
     snake = nullptr;
 }
 

@@ -1,9 +1,10 @@
 #pragma once
 #include "Snake.h"
+#include <memory>
 
 class Game {
 private:
-    Snake* snake;
+    std::unique_ptr<Snake> snake;;
     int width;
     int height;
     bool running;
