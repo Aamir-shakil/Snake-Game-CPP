@@ -1,7 +1,7 @@
 #pragma once
 #include "Segment.h"
 
-enum class Direction {
+enum Direction {
     UP,
     DOWN,
     LEFT,
@@ -10,9 +10,9 @@ enum class Direction {
 
 class Snake {
 private:
-    Segment* body;   // Dynamic array of segments
-    int length;      // Current number of segments
-    int capacity;    // Allocated memory
+    Segment* body; // dynamic array
+    int capacity;
+    int length;
     Direction dir;
 
 public:
@@ -24,8 +24,8 @@ public:
     void changeDirection(Direction newDir);
 
     Segment getHead() const;
+    bool hasCollidedWithSelf() const;
+
     int getLength() const { return length; }
-    const Segment* getBody() const { return body; }
+    Segment getSegment(int i) const { return body[i]; }
 };
-
-

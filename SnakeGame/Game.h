@@ -7,7 +7,7 @@ private:
     int width;
     int height;
     bool running;
-
+	int score;
     int foodX;
     int foodY;
 
