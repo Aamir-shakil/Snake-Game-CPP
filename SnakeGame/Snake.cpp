@@ -51,6 +51,25 @@ Segment Snake::getHead() const {
     return body[0];
 }
 
+Segment* Snake::getSegmentPtr(int index) {
+    return &body[index];
+}
+
+
+Segment* Snake::getHeadPtr() {
+    return &body[0];   // 
+}
+
+Segment* Snake::getBodyPtr() {
+    return body;       // raw pointer to dynamic array
+}
+
+Segment* Snake::getHeadPtr() {
+    return &body[0];
+}
+
+
+
 bool Snake::hasCollidedWithSelf() const {
     if (length <= 2) return false;
 

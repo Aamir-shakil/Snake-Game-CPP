@@ -48,11 +48,14 @@ void Game::update() {
     snake->move();
 
     // Wall collision
-    Segment head = snake->getHead();
-    if (head.x < 0 || head.x >= width || head.y < 0 || head.y >= height) {
+    Segment* pHead = snake->getHeadPtr();   // pointer variable 
+
+    if (pHead->x < 0 || pHead->x >= width ||
+        pHead->y < 0 || pHead->y >= height) {
         running = false;
         return;
     }
+
 
     // Self-collision
     if (snake->hasCollidedWithSelf()) {
@@ -84,14 +87,26 @@ void Game::render() {
             bool printed = false;
 
             // Draw snake
+            Segment* pHead = snake->getHeadPtr();   // pointer to head (once per frame)
+
             for (int i = 0; i < snake->getLength(); i++) {
-                Segment s = snake->getSegment(i);
-                if (s.x == x && s.y == y) {
-                    std::cout << 'O';
+                Segment* pBody = snake->getSegmentPtr(i);  // pointer with p-prefix
+
+                if (pBody->x == x && pBody->y == y) {
+
+                    // Pointer identity comparison (HEAD vs BODY)
+                    if (pBody == pHead) {
+                        std::cout << "@";   // head
+                    }
+                    else {
+                        std::cout << "o";   // body
+                    }
+
                     printed = true;
                     break;
                 }
             }
+
 
             // Draw food
             if (!printed && x == foodX && y == foodY) {

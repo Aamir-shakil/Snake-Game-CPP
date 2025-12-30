@@ -19,9 +19,14 @@ public:
     Snake(int startX, int startY);
     ~Snake();
 
+    Segment* getHeadPtr();
+    Segment* getBodyPtr();
     void move();
     void grow();
     void changeDirection(Direction newDir);
+    Segment* getSegmentPtr(int index);
+
+
 
     Segment getHead() const;
     bool hasCollidedWithSelf() const;
