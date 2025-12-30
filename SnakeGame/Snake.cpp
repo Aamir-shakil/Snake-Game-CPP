@@ -56,10 +56,6 @@ Segment* Snake::getSegmentPtr(int index) {
 }
 
 
-Segment* Snake::getHeadPtr() {
-    return &body[0];   // 
-}
-
 Segment* Snake::getBodyPtr() {
     return body;       // raw pointer to dynamic array
 }
@@ -73,9 +69,9 @@ Segment* Snake::getHeadPtr() {
 bool Snake::hasCollidedWithSelf() const {
     if (length <= 2) return false;
 
-    Segment head = body[0];
+    Segment pHead = body[0];
     for (int i = 1; i < length; i++) {
-        if (body[i].x == head.x && body[i].y == head.y)
+        if (body[i].x == pHead.x && body[i].y == pHead.y)
             return true;
     }
 

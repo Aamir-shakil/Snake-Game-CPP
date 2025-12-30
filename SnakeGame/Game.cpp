@@ -64,7 +64,7 @@ void Game::update() {
     }
 
     // Food collision
-    if (head.x == foodX && head.y == foodY) {
+    if (pHead->x == foodX && pHead->y == foodY) {
         snake->grow();
         score++;
         placeFood();
