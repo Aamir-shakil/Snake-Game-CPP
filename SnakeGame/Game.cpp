@@ -35,21 +35,24 @@ void Game::placeFood() {
 }
 
 void Game::placePoison(int x, int y) {
-    // resize if needed
-    if (poisonCount >= poisonCapacity) {
-        int newCapacity = poisonCapacity * 2;
-        Segment* pNewPoison = new Segment[newCapacity];
-
-        for (int i = 0; i < poisonCount; i++)
-            pNewPoison[i] = pPoison[i];
-
-        delete[] pPoison;
-        pPoison = pNewPoison;
-        poisonCapacity = newCapacity;
-    }
+    
 
     pPoison[poisonCount] = { x, y };
     poisonCount++;
+}
+
+void Game::showInstructions() {
+    system("cls"); // clear the screen
+
+    std::cout << "=== SNAKE GAME ===\n\n";
+    std::cout << "Rules:\n";
+    std::cout << "1. Move the snake using arrow keys.\n";
+    std::cout << "2. Eat '*' to grow.\n";
+    std::cout << "3. Avoid hitting walls, poison 'X', or your own body.\n";
+    std::cout << "4. Hitting any of these ends the game.\n\n";
+    std::cout << "Press any key to start the game...\n";
+
+    int ch = _getch();  // wait for user to press a key
 }
 
 
@@ -186,6 +189,8 @@ void Game::render() {
 
 // Game loop
 void Game::run() {
+    showInstructions(); // show rules first
+
     while (running) {
         processInput();
         update();

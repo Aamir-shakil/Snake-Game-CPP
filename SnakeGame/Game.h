@@ -27,5 +27,7 @@ public:
     void processInput();
     void placeFood();
     void placePoison(int x, int y);
+    void showInstructions();
+
 };
 #pragma once
