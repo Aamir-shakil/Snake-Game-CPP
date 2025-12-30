@@ -1,6 +1,11 @@
 #include "Snake.h"
 #include <iostream>
 
+/**
+ * Snake constructor
+ * Initializes the snake with a starting position.
+ * Allocates a dynamic array for the body and sets initial length and direction.
+ */
 Snake::Snake(int startX, int startY) {
     capacity = 100;
     body = new Segment[capacity];
@@ -10,6 +15,11 @@ Snake::Snake(int startX, int startY) {
     dir = RIGHT; // default direction
 }
 
+
+/**
+ * Snake destructor
+ * Frees the dynamic array allocated for the snake body.
+ */
 Snake::~Snake() {
     delete[] body;
 }
@@ -40,6 +50,7 @@ void Snake::move() {
     }
 }
 
+//grow snake by adding a new segment at the tail
 void Snake::grow() {
     if (length < capacity) {
         body[length] = body[length - 1];
@@ -47,10 +58,12 @@ void Snake::grow() {
     }
 }
 
+//get head segment
 Segment Snake::getHead() const {
     return body[0];
 }
 
+//get pointer to a specific segment
 Segment* Snake::getSegmentPtr(int index) {
     return &body[index];
 }
@@ -60,12 +73,17 @@ Segment* Snake::getBodyPtr() {
     return body;       // raw pointer to dynamic array
 }
 
+//get pointer to the head segment
 Segment* Snake::getHeadPtr() {
     return &body[0];
 }
 
 
 
+/**
+ * Check if the snake has collided with itself
+ * Returns true if any body segment overlaps the head.
+ */
 bool Snake::hasCollidedWithSelf() const {
     if (length <= 2) return false;
 
