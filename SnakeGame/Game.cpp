@@ -1,200 +1,138 @@
 ﻿#include "Game.h"
+#include "Food.h"
+#include "Poison.h"
 #include <iostream>
-#include <conio.h>  // for _kbhit() and _getch()
-#include <cstdlib>  // for rand()
-#include <ctime>
+#include <conio.h>
 #include <Windows.h>
+#include <cstdlib>
+#include <ctime>
 
-// Constructor
-Game::Game(int w, int h) : width(w), height(h), running(true), score(0) {
+Game::Game(int w, int h)
+    : width(w), height(h), running(true), score(0)
+{
+    srand(static_cast<unsigned>(time(nullptr)));
+
     snake = std::make_unique<Snake>(w / 2, h / 2);
-    placeFood();
-    poisonCapacity = 5;
-    poisonCount = 0;
-    pPoison = new Segment[poisonCapacity];
-    // Add 3 poison items at random positions
+
+    // Add one food
+    objects.push_back(new Food(width, height));
+
+    // Add 3 poison
     for (int i = 0; i < 3; i++) {
-        int x = rand() % width;
-        int y = rand() % height;
-        placePoison(x, y);
+        objects.push_back(new Poison(width, height));
     }
-
 }
 
-
-// Destructor
 Game::~Game() {
-    snake = nullptr;
-	delete[] pPoison; //free dynamic posiaon array memory
-}
-
-// Place food randomly on board
-void Game::placeFood() {
-    foodX = std::rand() % width;
-    foodY = std::rand() % height;
-}
-
-void Game::placePoison(int x, int y) {
-    
-
-    pPoison[poisonCount] = { x, y };
-    poisonCount++;
+    for (auto obj : objects) delete obj;
+    objects.clear();
 }
 
 void Game::showInstructions() {
-    system("cls"); // clear the screen
-
+    system("cls");
     std::cout << "=== SNAKE GAME ===\n\n";
-    std::cout << "Rules:\n";
-    std::cout << "1. Move the snake using arrow keys.\n";
-    std::cout << "2. Eat '*' to grow.\n";
-    std::cout << "3. Avoid hitting walls, poison 'X', or your own body.\n";
-    std::cout << "4. Hitting any of these ends the game.\n\n";
-    std::cout << "Press any key to start the game...\n";
-
-    int ch = _getch();  // wait for user to press a key
+    std::cout << "Use arrow keys to move.\n";
+    std::cout << "Eat '*' to grow.\n";
+    std::cout << "Avoid walls, poison 'X', and yourself.\n";
+    std::cout << "Press any key to start...\n";
+    (void)_getch();
 }
 
-
-// Process simple input (WASD)
 void Game::processInput() {
     if (_kbhit()) {
         int c = _getch();
-
-        // Arrow keys send two characters (224 then code)
         if (c == 224) {
-            c = _getch();  // get the actual arrow key code
-
+            c = _getch();
             switch (c) {
-            case 72: snake->changeDirection(UP); break;    // Up arrow
-            case 80: snake->changeDirection(DOWN); break;  // Down arrow
-            case 75: snake->changeDirection(LEFT); break;  // Left arrow
-            case 77: snake->changeDirection(RIGHT); break; // Right arrow
+            case 72: snake->changeDirection(UP); break;
+            case 80: snake->changeDirection(DOWN); break;
+            case 75: snake->changeDirection(LEFT); break;
+            case 77: snake->changeDirection(RIGHT); break;
             }
         }
     }
 }
 
-
-// Update game logic
 void Game::update() {
     snake->move();
 
-    // Wall collision
-    Segment* pHead = snake->getHeadPtr();   // pointer variable 
+    Segment* pHead = snake->getHeadPtr();
 
+    // Wall collision
     if (pHead->x < 0 || pHead->x >= width ||
         pHead->y < 0 || pHead->y >= height) {
         running = false;
         return;
     }
 
-	//Collision with poison
-    for (int i = 0; i < poisonCount; i++) {
-        Segment* pPoisonSeg = &pPoison[i];
-        if (pHead->x == pPoisonSeg->x && pHead->y == pPoisonSeg->y) {
-            running = false; // snake hits poison → game over
-            return;
-        }
-    }
-
-
-    // Self-collision
+    // Self collision
     if (snake->hasCollidedWithSelf()) {
         running = false;
         return;
     }
 
-    // Food collision
-    if (pHead->x == foodX && pHead->y == foodY) {
-        snake->grow();
-        score++;
-        placeFood();
+    // Object collisions
+    for (auto obj : objects) {
+        Segment pos = obj->getPosition();
+        if (pHead->x == pos.x && pHead->y == pos.y) {
+            obj->onCollision(snake.get(), score, running);
+            if (!running) return;
+        }
     }
 }
 
-
-// Render simple terminal output
 void Game::render() {
-    system("cls"); // clear screen (Windows only)
+    system("cls");
 
-    // Top border
     std::cout << '+';
     for (int x = 0; x < width; x++) std::cout << '-';
     std::cout << "+\n";
 
     for (int y = 0; y < height; y++) {
-        std::cout << '|'; // left border
+        std::cout << '|';
         for (int x = 0; x < width; x++) {
             bool printed = false;
 
-            // Draw snake
-            Segment* pHead = snake->getHeadPtr();   // pointer to head (once per frame)
-
+            Segment* pHead = snake->getHeadPtr();
             for (int i = 0; i < snake->getLength(); i++) {
-                Segment* pBody = snake->getSegmentPtr(i);  // pointer with p-prefix
-
-                if (pBody->x == x && pBody->y == y) {
-
-                    // Pointer identity comparison (HEAD vs BODY)
-                    if (pBody == pHead) {
-                        std::cout << "@";   // head
-                    }
-                    else {
-                        std::cout << "o";   // body
-                    }
-
+                Segment* seg = snake->getSegmentPtr(i);
+                if (seg->x == x && seg->y == y) {
+                    std::cout << (seg == pHead ? '@' : 'o');
                     printed = true;
                     break;
                 }
             }
 
-
-            // Draw food
-            if (!printed && x == foodX && y == foodY) {
-                std::cout << '*';
-                printed = true;
-            }
-
-			//Draw poison
-            for (int i = 0; i < poisonCount; i++) {
-                Segment* pPoisonSeg = &pPoison[i];
-                if (pPoisonSeg->x == x && pPoisonSeg->y == y) {
-                    std::cout << "X";  // symbol for poison
+            for (auto obj : objects) {
+                Segment pos = obj->getPosition();
+                if (!printed && pos.x == x && pos.y == y) {
+                    std::cout << obj->getSymbol();
                     printed = true;
                     break;
                 }
             }
 
-            // Empty space
             if (!printed) std::cout << ' ';
         }
-        std::cout << "|\n"; // right border
+        std::cout << "|\n";
     }
 
-    // Bottom border
     std::cout << '+';
     for (int x = 0; x < width; x++) std::cout << '-';
     std::cout << "+\n";
 
     std::cout << "Score: " << score << "\n";
 
-    // If game over
-    if (!running) {
-        std::cout << "\n    GAME OVER! Final Score: " << score << "\n";
-    }
+    if (!running)
+        std::cout << "\nGAME OVER! Final Score: " << score << "\n";
 }
 
-
-
-// Game loop
 void Game::run() {
-    showInstructions(); // show rules first
-
+    showInstructions();
     while (running) {
         processInput();
         update();
         render();
-        Sleep(150); // simple delay (ms)
+        Sleep(150);
     }
 }

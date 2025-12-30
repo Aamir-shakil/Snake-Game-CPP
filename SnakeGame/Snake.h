@@ -1,39 +1,25 @@
 #pragma once
 #include "Segment.h"
-/**
- * Snake class manages the snake’s body, movement, and direction.
- * Uses a dynamic array of Segment objects to represent the body.
- */
-enum Direction {
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT
-};
+
+enum Direction { UP, DOWN, LEFT, RIGHT };
 
 class Snake {
 private:
-    Segment* body; // dynamic array of snake segments
+    Segment* body;
     int capacity;
     int length;
     Direction dir;
 
 public:
-    Snake(int startX, int startY); // constructor
-    ~Snake(); //destructor
+    Snake(int startX, int startY);
+    ~Snake();
 
-    Segment* getHeadPtr();
-    Segment* getBodyPtr();
     void move();
     void grow();
     void changeDirection(Direction newDir);
-    Segment* getSegmentPtr(int index);
 
-
-
-    Segment getHead() const;
-    bool hasCollidedWithSelf() const;
-
+    Segment* getHeadPtr() { return &body[0]; }
+    Segment* getSegmentPtr(int index) { return &body[index]; }
     int getLength() const { return length; }
-    Segment getSegment(int i) const { return body[i]; }
+    bool hasCollidedWithSelf() const;
 };

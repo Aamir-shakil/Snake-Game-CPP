@@ -36,6 +36,12 @@
     <ClCompile Include="Game.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="Food.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="Poison.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Snake.h">
@@ -45,6 +51,15 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="Food.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="Poison.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,38 +1,26 @@
 #pragma once
 #include "Snake.h"
+#include "GameObject.h"
+#include <vector>
 #include <memory>
 
-/**
- * Game class manages the main game logic and state.
- * It handles the snake, food, poison, input, rendering, and game loop.
- * Uses pointers and a dynamic array to manage objects on the board.
- */
 class Game {
 private:
-	std::unique_ptr<Snake> snake; // smart pointer to Snake object
+    std::unique_ptr<Snake> snake;
     int width;
     int height;
     bool running;
-	int score;
-    int foodX;
-    int foodY;
+    int score;
 
-    // Dynaimc Array for posion
-    Segment* pPoison;    
-    int poisonCount;      
-    int poisonCapacity;   
+    std::vector<GameObject*> objects;
 
 public:
-	Game(int w, int h);// constructor
-	~Game();// destructor
+    Game(int w, int h);
+    ~Game();
 
     void run();
     void update();
     void render();
     void processInput();
-    void placeFood();
-    void placePoison(int x, int y);
     void showInstructions();
-
 };
-#pragma once
