@@ -12,6 +12,11 @@ private:
     int foodX;
     int foodY;
 
+    // Dynaimc Array for posion
+    Segment* pPoison;    
+    int poisonCount;      
+    int poisonCapacity;   
+
 public:
     Game(int w, int h);
     ~Game();
@@ -20,7 +25,7 @@ public:
     void update();
     void render();
     void processInput();
-
     void placeFood();
+    void placePoison(int x, int y);
 };
 #pragma once
