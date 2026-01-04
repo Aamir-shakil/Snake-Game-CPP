@@ -7,11 +7,13 @@
 #include <cstdlib>
 #include <ctime>
 
+// Constructor: sets up the game board, snake, and game objects
 Game::Game(int w, int h)
     : width(w), height(h), running(true), score(0)
 {
     srand(static_cast<unsigned>(time(nullptr)));
 
+    // Create snake at center using smart pointer for automatic memory management
     snake = std::make_unique<Snake>(w / 2, h / 2);
 
     // Add one food
@@ -23,11 +25,13 @@ Game::Game(int w, int h)
     }
 }
 
+// Destructor: cleans up dynamically allocated GameObjects
 Game::~Game() {
     for (auto obj : objects) delete obj;
     objects.clear();
 }
 
+// Displays instructions to the player
 void Game::showInstructions() {
     system("cls");
     std::cout << "=== SNAKE GAME ===\n\n";
@@ -53,6 +57,8 @@ void Game::processInput() {
     }
 }
 
+
+// Updates game state: snake movement, collision detection, and scoring
 void Game::update() {
     snake->move();
 
@@ -81,6 +87,7 @@ void Game::update() {
     }
 }
 
+// Renders the game board, snake, and objects to console
 void Game::render() {
     system("cls");
 
@@ -102,7 +109,8 @@ void Game::render() {
                     break;
                 }
             }
-
+            
+            // Render polymorphic game objects
             for (auto obj : objects) {
                 Segment pos = obj->getPosition();
                 if (!printed && pos.x == x && pos.y == y) {
@@ -127,6 +135,7 @@ void Game::render() {
         std::cout << "\nGAME OVER! Final Score: " << score << "\n";
 }
 
+// Runs the main game loop
 void Game::run() {
     showInstructions();
     while (running) {
